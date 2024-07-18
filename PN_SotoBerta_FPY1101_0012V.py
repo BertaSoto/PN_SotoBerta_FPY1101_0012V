@@ -44,13 +44,20 @@ def ver_estadisticas():
 def reporte_sueldos():
     if sueldo_bruto:
         with open('reporte_sueldos.csv', 'w', newline='') as csvfile:
-            fieldnames = ['Trabajador', 'Sueldo Bruto']
+            fieldnames = ['Trabajador', 'Sueldo Bruto', 'Descuento Salud', 'Descuento AFP', 'Sueldo Líquido']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
             writer.writeheader()
             for trabajador, sueldo in sueldo_bruto.items():
-                writer.writerow({'Trabajador': trabajador, 'Sueldo Bruto': sueldo})
-
+                descuento_salud = sueldo * 0.07
+                descuento_afp = sueldo * 0.12
+                sueldo_liquido = sueldo - descuento_salud - descuento_afp
+                writer.writerow({
+                    'Trabajador': trabajador,
+                    'Sueldo Bruto': sueldo,
+                    'Descuento Salud': round(descuento_salud, 2),
+                    'Descuento AFP': round(descuento_afp, 2),
+                    'Sueldo Líquido': round(sueldo_liquido, 2)
+                })
         print("Reporte de sueldos generado correctamente.")
     
     
